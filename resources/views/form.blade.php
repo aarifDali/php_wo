@@ -14,6 +14,14 @@
     <center>
         Data Form
     </center>
+  @if ($message = Session::get('success'))
+      <div class="alert alert-success alert-block">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+              <strong>{{ $message }}</strong>
+      </div>
+      
+      <img src="assets/image/{{ Session::get('image') }}" alt="User Image" width="100">
+  @endif
 <form action="store_data" method="POST" enctype="multipart/form-data">
 
 @csrf

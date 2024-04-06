@@ -32,7 +32,7 @@
       <td>{{$record->mobile}}</td>
       <td>{{$record->password}}</td>
       <td>
-          <img src="D:\Workouts\form\public\assets\image\{{$record->image}}" alt="User Image" width="100">
+          <img src="{{$record->image}}" alt="User Image" width="100">
       </td>
     </tr>
 @endforeach

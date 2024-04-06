@@ -36,16 +36,19 @@ class FormSubmit extends Controller
         // $data->image = $request->file('image')->store('public');
 
         if ($request->hasFile('image')) {
-            $filename =  'img-' . time() . '.' . $request->image->extension(); 
-
-            $data->image = $request->image->move(public_path('assets\image'), $filename);
+            $imageName =  'img-' . time() . '.' . $request->image->extension(); 
+            $imagePath = 'assets/image/' . $imageName;
+            $request->image->move(public_path('assets\image'), $imageName);
+            $data->image =$imagePath;
         }
 
         
 
         $data->save();
 
-        return back();
+        return back()
+                    ->with('success', $data->username.', you have successfully upload form.')
+                    ->with('image', $imageName);
 
 
 
