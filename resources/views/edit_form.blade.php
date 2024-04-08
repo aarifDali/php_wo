@@ -9,7 +9,7 @@
 </head>
 <body>
 <center>
-        Data Form
+        Edit Data
     </center>
 
 <div class="container">
@@ -20,14 +20,14 @@
               <strong>{{ $message }}</strong>
       </div>
       
-      <img src="assets/image/{{ Session::get('image') }}" alt="User Image" width="100">
+      
   @endif
-<form action="store_data" method="POST" enctype="multipart/form-data">
+<form action="{{url('update_data', $data->id)}}" method="POST" enctype="multipart/form-data">
 
 @csrf
   <div class="form-group">
     <label for="exampleInputEmail1">Username</label>
-    <input type="text" name="username" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter Username" autocomplete="off">
+    <input type="name" name="username" class="form-control" id="username" aria-describedby="emailHelp" value="{{$data->username}}" placeholder="Enter Username" autocomplete="off">
     
   </div>
   @error('username')
@@ -36,7 +36,7 @@
 
   <div class="form-group">
     <label for="exampleInputEmail1">Email </label>
-    <input type="email" name="temp_email" class="form-control" id="temp_email" aria-describedby="emailHelp" placeholder="Enter email">
+    <input type="email" name="temp_email" class="form-control" id="temp_email" value="{{$data->temp_email}}" aria-describedby="emailHelp" placeholder="Enter email">
     
   </div>
   @error('temp_email')
@@ -44,7 +44,7 @@
   @enderror
   <div class="form-group">
     <label for="exampleInputEmail1">Mobile </label>
-    <input type="number" name="mobile" class="form-control" id="mobile" aria-describedby="emailHelp" placeholder="Enter Mobile No:">
+    <input type="number" name="mobile" class="form-control" value="{{$data->mobile}}" id="mobile" aria-describedby="emailHelp" placeholder="Enter Mobile No:">
     
   </div>
   @error('mobile')
@@ -52,16 +52,22 @@
   @enderror
   <div class="form-group">
     <label for="exampleInputPassword1">Password</label>
-    <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+    <input type="text" name="password" class="form-control" value = "{{$data->password}}" id="password" placeholder="Password">
   </div>
   @error('password')
     <b>{{$message}}</b>
   @enderror
+  @if($data->image)
+        <img src="{{ asset($data->image) }}" width="100">
+  @else
+    No Image
+  @endif
+  
   <div class="form-group">
-    <label for="">Image</label>
+    <label for="">Current Image</label>
     <div class="avatar-upload">
       <div>
-        <input type="file" name="image" id="image" accept=".png, .jpg, .jpeg">
+        <input type="file" name="image"  id="image" accept=".png, .jpg, .jpeg">
         <label for="image"></label>
       </div>
     </div>
@@ -71,7 +77,7 @@
   @enderror
   
   
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" class="btn btn-primary">Update </button>
   <!-- Button to go to the 'records' function -->
   <a href="{{ route('records') }}" class="btn btn-success">Go to Records</a>
 
