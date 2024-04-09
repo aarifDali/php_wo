@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Friend;
+use Illuminate\Support\Facades\File;
 use DB;
 
 class FormSubmit extends Controller
+
 {
 
 
@@ -99,19 +101,27 @@ class FormSubmit extends Controller
     
 
         if ($request->hasFile('image')) { 
+
+            $OldImagePath = $data->image;
+
             $imageName =  'img-' . time() . '.' . $request->image->extension(); 
             $imagePath = 'assets/image/' . $imageName;
             $request->image->move(public_path('assets\image'), $imageName);
             $data->image =$imagePath;
+
+
+            if ($OldImagePath && File::exists(public_path($OldImagePath))){
+                File::delete(public_path($OldImagePath));
+            }
         }
 
-        $OldImage = public_path('assets\images').$request.$data->image;
+       
 
         
 
         
          
-        $data->save();
+        $data->save(); 
 
         return redirect('records')
                             ->with('success', $data->username.', you have successfully updated your profile.');
