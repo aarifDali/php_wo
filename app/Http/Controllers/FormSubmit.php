@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Friend;
 use Illuminate\Support\Facades\File;
+use Yajra\DataTables\Facades\Datatables;
 use DB;
 
 class FormSubmit extends Controller
@@ -26,10 +27,10 @@ class FormSubmit extends Controller
             'temp_email' => ['required', 'unique:friends', 'email'],
             'mobile' => ['required', 'unique:friends', 'numeric'],
             'password' => ['required'],
-            'image' => ['required','image', 'mimes:jpeg,png,jpg', 'max:2048']
+            'image' => ['image', 'mimes:jpeg,png,jpg', 'max:2048']
         ]);
  
-        $data = new Friend;
+        $data = new Friend; 
 
         $data->username = $request->input('username');
         $data->temp_email = $request->input('temp_email');
@@ -37,7 +38,7 @@ class FormSubmit extends Controller
         $data->password = $request->input('password');
     
 
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('image')) { 
             $imageName =  'img-' . time() . '.' . $request->image->extension(); 
             $imagePath = 'assets/image/' . $imageName;
             $request->image->move(public_path('assets\image'), $imageName);
@@ -47,10 +48,15 @@ class FormSubmit extends Controller
         
 
         $data->save();
+        if (isset($imageName)) {
+            return back()->with('success', $data->username . ', you have successfully uploaded the form.')->with('image', $imageName);
+        } else {
+            return back()->with('success', $data->username . ', you have successfully uploaded the form.');
+        }
 
-        return back()
-                    ->with('success', $data->username.', you have successfully upload form.')
-                    ->with('image', $imageName);
+        // return back()
+        //             ->with('success', $data->username.', you have successfully upload form.')
+        //             ->with('image', $imageName);
 
 
 
@@ -128,4 +134,25 @@ class FormSubmit extends Controller
                     
     }
 
+
+    public function viewdt(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Friend::query();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $editUrl = route('edit_record', $row->id);
+                    $deleteUrl = route('delete_records', $row->id);
+                    $actionBtn = '<a href="'.$editUrl.'" class="edit btn btn-success btn-sm">Edit</a> <a href="'.$deleteUrl.'" class="delete btn btn-danger btn-sm">Delete</a>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        return view('viewdt');
+    }
 }
+
+

@@ -73,7 +73,7 @@
   
   <button type="submit" class="btn btn-primary">Submit</button>
   <!-- Button to go to the 'records' function -->
-  <a href="{{ route('records') }}" class="btn btn-success">Go to Records</a>
+  <a href="{{ route('viewdt') }}" class="btn btn-success">Go to Records</a>
 
 </form>
 </div>
